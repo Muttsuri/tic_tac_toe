@@ -4,30 +4,46 @@ import "./App.css";
 import * as T from "./Types";
 import Cell from "./components/Cell";
 
+// Just some shorthand so I don't have to type the full thing everytime I want to
+const X = T.Player.X;
+const O = T.Player.O;
+
 function App(): JSX.Element {
   const [cells, setCells] = useState<T.CellValue[]>(
     Array<T.CellValue>(9).fill(null)
   );
-  const [currentPlayer, setCurrentPlayer] = useState<T.Player>("X");
+  const [currentPlayer, setCurrentPlayer] = useState<T.Player>(X);
+  const [rounds, setRounds] = useState<number>(0);
 
-  const flipPlayer = (p: T.Player): T.Player => (p === "X" ? "Y" : "X");
+  const flipPlayer = useCallback(
+    (p: T.Player): T.Player => (p === X ? O : X),
+    []
+  );
+
+  const checkVictory = ():T.Over => {
+    return T.Over.Draw;
+  };
 
   const clickCell = useCallback(
     (value: T.CellValue, index: number) =>
       (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-        console.log(`Cell nº${index} with Value:${value}`);
+        // console.log(`Cell nº${index} with Value:${value}`);
 
         // There might be a better way to do this but it's 8 am and I haven't slept
         const newCells = cells;
-        cells[index] = currentPlayer;
-        setCells(newCells);
 
-        // TODO: Prevent flip if cell already has a value (easy)
-        // TODO: Call some check function to see if there is any victor. Then set the victor somehwere 
+        // Only act on the given cell if the cell is empty
+        if (cells[index] === null) {
+          newCells[index] = currentPlayer;
+          setCells(newCells);
+          setCurrentPlayer(flipPlayer(currentPlayer));
+          setRounds(rounds + 1);
+        }
 
-        setCurrentPlayer(flipPlayer(currentPlayer));
+        // TODO: Prevent flip if cell already has a value (easy) [✔]
+        // TODO: Call some check function to see if there is any victor. Then set the victor somehwere
       },
-    [cells, currentPlayer]
+    [cells, currentPlayer, flipPlayer, rounds]
   );
 
   return (
