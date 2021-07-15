@@ -1,2 +1,2 @@
-export type Player = "X" | "Y" 
+export type Player = "X" | "O" 
 export type CellValue = Player?
