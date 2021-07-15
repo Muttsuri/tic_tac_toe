@@ -14,14 +14,20 @@ html {
   text-align: center;
   color: var(--main-text-color);
   min-width: 100vw;
+  max-width: 100vw;
+}
+
+.App > .App-Header {
+  min-height: 10vh;
+  max-height: 10vh;
 }
 
 .App-Core {
-  min-height: 89vh;
+  min-height: 90vh;
   max-height: 90vh;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  font-size: calc(20px + 6vmax);
+  font-size: calc(10px + 8vmin);
   background-color: var(--main-text-color);
   gap: 1px
 }
